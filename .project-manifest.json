@@ -1,0 +1,52 @@
+{
+  "project_shape": "backend",
+  "modules": [
+    {
+      "id": "__main__",
+      "path": "cubeseams/__main__.py"
+    },
+    {
+      "id": "edges",
+      "path": "cubeseams/edges.py"
+    },
+    {
+      "id": "faces",
+      "path": "cubeseams/faces.py"
+    },
+    {
+      "id": "pipeline",
+      "path": "cubeseams/pipeline.py"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "report",
+      "name": "离线数据报告",
+      "entry": "python3 -B -m cubeseams examples/demo.json",
+      "success": "从六面签名坐标系配对同一条物理边，并产出方向归一后的像素误差证据。",
+      "failure": "格式错误退出 2，例如：invalid or repeated face orientation",
+      "verification": "python3 -B examples/smoke.py",
+      "module_ids": [
+        "__main__",
+        "edges",
+        "faces",
+        "pipeline"
+      ],
+      "steps": [
+        "读取样例与验证来源数据",
+        "计算并核对结构化报告或拒绝诊断"
+      ]
+    }
+  ],
+  "complexity": {
+    "mechanisms": [
+      {
+        "id": "domain-report",
+        "workflow_ids": [
+          "report"
+        ],
+        "behavior": "edge topology, orientation reversal, and exact pixel pairing"
+      }
+    ]
+  }
+}
